@@ -1,0 +1,5 @@
+color=input("What's your favorite color? ")
+print('You said your favorite color is ' + color)
+print('Me too!')
+food=input("What's your favorite food? ")
+print(food.capitalize() + " sounds delicious!")
