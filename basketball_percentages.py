@@ -1,6 +1,18 @@
 from datetime import datetime
 import csv
 
+def hit_enter_func(thing):
+    loop_func = True
+    if thing == "home":
+        thing = "home screen"
+    while loop_func:
+        loop_input = input(f"Hit enter to return to the {thing}.")
+        if loop_input == "":
+            loop_func = False
+        else:
+            loop_func = False
+    print("")
+
 def retrieve_datetime():
     current_date_and_time = datetime.now()
     #current_date_and_time:%A %I:%M %p
@@ -10,17 +22,17 @@ def calculate_shooting_percentage(shots_made, shots_taken):
     shooting_percentage = round(((shots_made/shots_taken) * 100), 2)
     return shooting_percentage
 
-def calculate_season_predictions():
-    games_played = int(input("How many games have been played this season? "))
-    games_left = int(input("How many games are left in the season? "))
-    desired_stat = (input("What stat are you tracking? (points, rebounds, assists, or steals): "))
-    stat_so_far = int(input(f"How many total {desired_stat} do you have so far this season? "))
-    desired_statline = int(input("What is the desired statline? (i.e. 32 points per game, or 2 steals per game. Only input the number) "))
-    averages_so_far = stat_so_far / games_played
-    games_total = games_played + games_left
-    total_stats_wanted = (desired_statline * games_total)
-    required_stats_per_game = (total_stats_wanted - stat_so_far) / games_left
-    print(f"\nSo far, you are averaging {averages_so_far:.2f} {desired_stat} per game. In order to average {desired_statline} {desired_stat} per game, you need to average {required_stats_per_game:.2f} {desired_stat} per game for the rest of the season.\n")
+def calculate_season_predictions(season_predictions_list):
+    return_list = []
+    #averages_so_far
+    return_list.append(season_predictions_list[3] / season_predictions_list[0])
+    #games_total = 
+    return_list.append(season_predictions_list[0] + season_predictions_list[1])
+    #total_stats_wanted = 
+    return_list.append((season_predictions_list[4] * return_list[1]))
+    #required_stats_per_game = 
+    return_list.append((return_list[2] - season_predictions_list[4]) / season_predictions_list[1])
+    return return_list
 
 def read_csv_file(file_name):
     stats = {}
@@ -45,8 +57,8 @@ def calculate_global_practice_shooting_percentage():
         row = stats[key]
         total_shots_made += float(row[0])
         total_shots_taken += float(row[1])
-    global_shooting_percentage = round(total_shots_made / total_shots_taken, 2)
-    return global_shooting_percentage
+    global_shooting_percentage = calculate_shooting_percentage(total_shots_made, total_shots_taken)
+    return global_shooting_percentage       
 
 def calculate_game_averages(stats):
     total_minutes = 0
@@ -57,18 +69,17 @@ def calculate_game_averages(stats):
     total_blocks = 0
     total_shots_made = 0
     total_shots_taken = 0
-    averages_list = []
     for key in stats:
-        row = stats[key]
+        row = (stats[key])
         total_minutes += float(row[0])
         total_shots_made += float(row[1])
         total_shots_taken += float(row[2])
-        print(total_shots_taken)
         total_points += float(row[4])
         total_assists += float(row[5])
         total_rebounds += float(row[6])
         total_steals += float(row[7])
         total_blocks += float(row[8])
+    averages_list = []
     shooting_percentage = calculate_shooting_percentage(total_shots_made, total_shots_taken)
     #minutes(0)
     averages_list.append(int(round((total_minutes / len(stats)), 0)))
@@ -122,14 +133,15 @@ def main():
                         shooting_percentage = calculate_shooting_percentage(shots_made, shots_taken)
                         print(f"You made {shots_made}/{shots_taken}, which is a shooting percentage of {shooting_percentage}%.\n")
                     elif input_1A.lower() == "b":
-                        loop_1B = True
-                        while loop_1B:
-                            calculate_season_predictions()
-                            input_1B = input("Hit enter to return to the statisics module. ")
-                            if input_1B == "":
-                                loop_1B = False
-                            else:
-                                loop_1B = False
+                        season_predictions_list = []
+                        season_predictions_list.append(int(input("How many games have been played this season? ")))
+                        season_predictions_list.append(int(input("How many games are left in the season? ")))
+                        season_predictions_list.append((input("What stat are you tracking? (points, rebounds, assists, or steals): ")))
+                        season_predictions_list.append(int(input(f"How many total {season_predictions_list[2]} do you have so far this season? ")))
+                        season_predictions_list.append(int(input("What is the desired statline? (i.e. 32 points per game, or 2 steals per game. Only input the number) ")))
+                        return_list = calculate_season_predictions(season_predictions_list)
+                        print(f"\nSo far, you are averaging {return_list[0]:.2f} {season_predictions_list[3]} per game. In order to average {season_predictions_list[4]} {season_predictions_list[3]} per game, you need to average {return_list[4]:.2f} {season_predictions_list[3]} per game for the rest of the season.\n")
+                        hit_enter_func("module")
                     elif input_1A.lower() == "c":
                         loop_1A = False
                         input_loop = False
@@ -146,16 +158,8 @@ def main():
                     with open("shooting_stats.csv", "at") as dimens_file:
                         print(f"{current_date_and_time:%A %I:%M %p},{shots_made},{shots_taken},{shooting_percentage}", file=dimens_file)
                     print(f"Overall, you shot {shooting_percentage}% from the field. This data has been saved to your global file.")
-                    loop_2B = True
-                    while loop_2B:
-                        input_2B = input("Hit enter to return to the home screen. ")
-                        if input_2B == "":
-                            loop_2B = False
-                            loop_2A = False
-                        else:
-                            loop_2B = False
-                            loop_2A = False
-
+                    hit_enter_func("home")
+                    loop_2A = False
                 input_loop = False
             elif intro_input == 3:
                 game_dict = {}
@@ -175,24 +179,12 @@ def main():
                 with open("gameplay_stats.csv", "at") as dimens_file:
                     print(f"{game_dict}", file=dimens_file)
                 print("\nYour game has been saved to your global data.")
-                loop_3A = True
-                while loop_3A:
-                    input_3A = input("Hit enter to return to the home screen. ")
-                    if input_3A == "":
-                        loop_3A = False
-                    else:
-                        loop_3A = False
+                hit_enter_func("home")
                 input_loop = False
             elif intro_input == 4:
                 global_shooting_percentage = calculate_global_practice_shooting_percentage()
                 print(f"In practice, you are averaging {global_shooting_percentage}%.")
-                loop_4A = True
-                while loop_4A:
-                    input_4A = input("Hit enter to return to the home screen. ")
-                    if input_4A == "":
-                        loop_4A = False
-                    else:
-                        loop_4A = False
+                hit_enter_func("home")
                 input_loop = False
             elif intro_input == 5:
                 loop_5A = True
@@ -224,15 +216,8 @@ def main():
                             print(f"Rebounds: {averages_list[6]}")
                             print(f"Steals: {averages_list[7]}")
                             print(f"Blocks: {averages_list[8]}")
-                            loop_5B = True
-                            while loop_5B:
-                                input_5B = input("Hit enter to return to the home screen. ")
-                                if input_5B == "":
-                                    loop_5A = False
-                                    loop_5B = False
-                                else:
-                                    loop_5A = False
-                                    loop_5B = False
+                            hit_enter_func("home")
+                            loop_5A = False
                         elif gameplay_input.lower() == "b":
                             print(f"You average {averages_list[0]} minutes per game.")
                         elif gameplay_input.lower() == "c":
@@ -259,10 +244,8 @@ def main():
             elif intro_input == 6:
                 input_loop = False
                 program_running = False
-
             else:
                 print("That is not a valid number.")
-
     print("Have a great day!")    
 
 if __name__ == "__main__":
