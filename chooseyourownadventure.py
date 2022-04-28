@@ -46,7 +46,7 @@ elif choice1.lower() == "stay":
         choice7 = input("Do you...\nHIDE in your shelter or MEET the crowd? ")
         if choice7.lower() == "hide":
             print("\nYou duck down into the bushes to hide from the incoming noise. It comes, passes, and you are left alone again. In the end, you wish you would have said something, because those are the last voices you heard.\nTHE END")
-        elif choice7.lower() == "meet"
+        elif choice7.lower() == "meet":
             print("As you rush out to meet the group of wandering people, the first thing you realize is they are not speaking your language. And as you get closer, you find they are not friendly either. Eventually someone finds your body, but with a few limbs missions.\nTHE END")
         else:
             print("-\n" + "You die a horrible and slow death for not conforming to the programmers wishes. Better luck next time.")

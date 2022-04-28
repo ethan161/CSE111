@@ -122,7 +122,6 @@ periodic_table = {
 def make_periodic_table():
     return periodic_table
 
-
 class FormulaError(ValueError):
     pass
 

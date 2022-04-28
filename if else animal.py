@@ -14,7 +14,7 @@ else:
     print("The second number is not greater. \n")
 
 favorite_animal = input("What is your favorite animal? ")
-if favorite_animal.lower() == tiger:
+if favorite_animal.lower() == "tiger":
     print("That is also my favorite animal.")
 else:
     print("That is not my favorite animal.")

@@ -12,13 +12,13 @@ while check1:
 print("\nYour shopping list is: ")
 for i in range(len(item_list)):
     item = item_list[i]
-    print(f"{i}. {item.capitalize()}")
+    print(f"{i + 1}. {item.capitalize()}")
 
-index = int(input("Which item would you like to change? "))
+index = (int(input("Which item would you like to change? "))) - 1
 item_replacement = input("What is the new item? ")
 
 item_list[index] = item_replacement
 
 for i in range(len(item_list)):
     item = item_list[i]
-    print(f"{i}. {item.capitalize()}")
+    print(f"{i + 1}. {item.capitalize()}")
